@@ -41,5 +41,5 @@ jobs:
         with:
           title: Monthly pull request metrics report (${{ steps.days.outputs.last_month }})
           token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: 403 # 最初に作った Issue を更新する。https://github.com/korosuke613/zenn-articles/issues/403
+          # issue-number: 403 # 最初に作った Issue を更新する。https://github.com/korosuke613/zenn-articles/issues/403
           content-filepath: ./issue_metrics.md
