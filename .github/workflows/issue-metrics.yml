@@ -13,17 +13,16 @@ jobs:
     name: pull request metrics
     runs-on: ubuntu-latest
     steps:
-      - name: 1 ヶ月前の範囲を取得 # 例: 7 月に実行した場合、2023-06-01..2023-06-30 のようになる
+      - name: 1ヶ月前の範囲を取得 # 例: 7 月に実行した場合、2023-06-01..2023-06-30 のようになる
         shell: bash
         id: days
         run: |
           # Calculate the first day of the previous month
-          # first_day=$(date -d "last month" +%Y-%m-01)
           first_day=$(date -d "last month" +%Y-%m-01)
 
           # Calculate the last day of the previous month
           # last_day=$(date -d "$first_day +1 month -1 day" +%Y-%m-%d)
-          last_day=$(date -d "$first_day +1 month day" +%Y-%m-%d)
+          last_day=$(date -d "$first_day +2 month -1 day" +%Y-%m-%d)
           
           #Set an environment variable with the date range
           echo "$first_day..$last_day"
