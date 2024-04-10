@@ -1,0 +1,48 @@
+name: Monthly pull request metrics
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "3 3 1 * *"
+
+permissions:
+  issues: write
+  pull-requests: read
+
+jobs:
+  build:
+    name: pull request metrics
+    runs-on: self-hosted
+    steps:
+      # test
+      - uses: actions/checkout@v1
+      - name: build packages
+        run: make all
+      - name: 1ヶ月前の範囲を取得 # 例: 7 月に実行した場合、2023-06-01..2023-06-30 のようになる
+        shell: bash
+        id: days
+        run: |
+          # Calculate the first day of the previous month
+          first_day=$(date -d "last month" +%Y-%m-01)
+
+          # Calculate the last day of the previous month
+          # last_day=$(date -d "$first_day +1 month -1 day" +%Y-%m-%d)
+          last_day=$(date -d "$first_day +2 month -1 day" +%Y-%m-%d)
+
+          #Set an environment variable with the date range
+          echo "$first_day..$last_day"
+          echo "last_month=$first_day..$last_day" >> "$GITHUB_OUTPUT"
+
+      - name: Run issue-metrics tool
+        uses: github/issue-metrics@v2 # v2
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # ワークフロー実行リポジトリで
+          # 先月に作られたプルリクエストを抽出
+          SEARCH_QUERY: "repo:${{ github.repository }} is:pr created:${{ steps.days.outputs.last_month }}"
+
+      - name: Create issue
+        uses: peter-evans/create-issue-from-file@v5 # v5
+        with:
+          title: Monthly pull request metrics report (${{ steps.days.outputs.last_month }})
+          token: ${{ secrets.GITHUB_TOKEN }}
+          content-filepath: ./issue_metrics.md
