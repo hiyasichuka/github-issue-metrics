@@ -1,4 +1,4 @@
-name: Monthly pull request metrics
+name: test
 on:
   workflow_dispatch:
   schedule:
@@ -13,10 +13,6 @@ jobs:
     name: pull request metrics
     runs-on: self-hosted
     steps:
-      # test
-      - uses: actions/checkout@v1
-      - name: build packages
-        run: make all
       - name: 1ヶ月前の範囲を取得 # 例: 7 月に実行した場合、2023-06-01..2023-06-30 のようになる
         shell: bash
         id: days
