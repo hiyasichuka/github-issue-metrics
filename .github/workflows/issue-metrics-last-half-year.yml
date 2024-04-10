@@ -28,7 +28,6 @@ jobs:
       - name: Run issue-metrics tool
         uses: github/issue-metrics@v3
         env:
-          GH_ENTERPRISE_URL: https://git.dmm.com/
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SEARCH_QUERY: "repo:${{ github.repository }} is:pr no:revert created:${{ env.last_half }}"
 
