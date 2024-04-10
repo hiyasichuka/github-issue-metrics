@@ -2,7 +2,7 @@ name: Monthly pull request metrics
 on:
   workflow_dispatch:
   schedule:
-    - cron: '3 3 1 * *'
+    - cron: "3 3 1 * *"
 
 permissions:
   issues: write
@@ -18,12 +18,12 @@ jobs:
         id: days
         run: |
           # Calculate the first day of the previous month
-          first_day=$(date -d "last month" +%Y-%m-01)
+          first_day=$(date +%Y-%m-01)
 
           # Calculate the last day of the previous month
           # last_day=$(date -d "$first_day +1 month -1 day" +%Y-%m-%d)
           last_day=$(date -d "$first_day +2 month -1 day" +%Y-%m-%d)
-          
+
           #Set an environment variable with the date range
           echo "$first_day..$last_day"
           echo "last_month=$first_day..$last_day" >> "$GITHUB_OUTPUT"
@@ -34,7 +34,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # ワークフロー実行リポジトリで
           # 先月に作られたプルリクエストを抽出
-          SEARCH_QUERY: 'repo:${{ github.repository }} is:pr created:${{ steps.days.outputs.last_month }}'
+          SEARCH_QUERY: "repo:${{ github.repository }} is:pr no:revert created:${{ env.last_half }}"
 
       - name: Create issue
         uses: peter-evans/create-issue-from-file@v5 # v5
