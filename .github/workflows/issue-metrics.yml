@@ -1,4 +1,4 @@
-name: Monthly pull request metrics
+name: Metrics Report
 on:
   workflow_dispatch:
   schedule:
@@ -32,13 +32,11 @@ jobs:
         uses: github/issue-metrics@v2 # v2
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # ワークフロー実行リポジトリで
-          # 先月に作られたプルリクエストを抽出
-          SEARCH_QUERY: "repo:${{ github.repository }} is:pr no:revert created:${{ env.last_half }}"
+          SEARCH_QUERY: "repo:${{ github.repository }} is:pr NOT revert created:${{ env.last_half }}"
 
       - name: Create issue
         uses: peter-evans/create-issue-from-file@v5 # v5
         with:
-          title: Monthly pull request metrics report (${{ steps.days.outputs.last_month }})
+          title: Monthly pull request metrics report (${{ steps.days.outputs.last_half }})
           token: ${{ secrets.GITHUB_TOKEN }}
           content-filepath: ./issue_metrics.md
