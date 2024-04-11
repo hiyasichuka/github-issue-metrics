@@ -33,7 +33,7 @@ jobs:
         uses: github/issue-metrics@v2 # v2
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SEARCH_QUERY: "repo:${{ github.repository }} is:pr  created:${{ steps.days.outputs.last_month }}"
+          SEARCH_QUERY: "repo:${{ github.repository }} is:pr NOT revert created:${{ steps.days.outputs.last_month }}"
 
       - name: Create issue
         uses: peter-evans/create-issue-from-file@v5 # v5
